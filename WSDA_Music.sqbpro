@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/laksh/Downloads/Ex_Files_SQL_EssT/Ex_Files_SQL_EssT/Exercise Files/WSDA_Music.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="5253"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="0" parent="0"/><expanded_item id="3" parent="0"/><expanded_item id="4" parent="0"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,6:mainArtist"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Album" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="84"/><column index="2" value="280"/><column index="3" value="76"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Artist" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="76"/><column index="2" value="187"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="InvoiceLine" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="129"/><column index="2" value="93"/><column index="3" value="75"/><column index="4" value="88"/><column index="5" value="84"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="V_Avgtotal" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="97"/><column index="2" value="132"/><column index="3" value="180"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">-- hey
+/*
+Created by 
+Created on
+Description
+*/
+
+SELECT
+FirstName AS [Customers name], --aliasing 
+LastName,
+Email
+
+FROM
+Customer
+
+ORDER BY
+--FirstName ASC -- order in ascending , ascending is DEFAULT
+--FirstName DESC,
+LastName DESC --when given these two queries together, first name will be ordered acsendingly and if there are two same names, it will be order using the last name decendingly 
+--LIMIT 20
+
+</sql><sql name="SQL 3">SELECT 
+ InvoiceDate,
+ InvoiceId,
+ total,
+ CASE
+ WHEN total&lt;2.00 THEN 'Baseline'
+ WHEN total BETWEEN 2.00 AND 6.99 THEN 'LOW'
+ ELSE 'Average'
+ END AS Purchase type
+
+FROM Invoice
+
+WHERE
+--UnitPrice &gt;=1.0
+--AlbumId BETWEEN 200 AND 204
+--AlbumId IN(200,204,205) -- gives only those values which have album id as 200 and 204 nd 205
+
+--BillingCountry= 'Germany'
+--BillingCountry IN('Germany', 'France', 'Australia','Italy')
+--BillingCity LIKE 'B%' -- Starts with B and what comes next doesnt matter %B% will give those cities which have B in them
+--DATE(InvoiceDate)&gt;='2013-01-01' AND Total &gt;3.00
+
+ORDER BY
+ InvoiceDate
+
+ --'%' means doesnt matter what comes next 
+
+</sql><sql name="SQL 4">SELECT
+InvoiceDate,
+BillingCity,
+total,
+CASE
+WHEN total &lt;2.00 THEN 'Baseline'
+WHEN total BETWEEN 2.00 AND 6.00 THEN 'Low'
+WHEN total BETWEEN 6.00 AND 15.00 then 'Average'
+ELSE 'Top'
+END AS [Purchase type]
+
+ 
+ 
+FROM
+Invoice
+
+WHERE
+--[Purchase type] = 'Top' AND
+BillingCity='Brussels'
+
+
+ORDER BY
+BillingCity
+
+</sql><sql name="SQL 5">SELECT 
+ e.FirstName,
+ e.LastName,
+ e.EmployeeId,
+ i.CustomerId,
+ i.total,
+ c.FirstName,
+ c.LastName,
+ c.CustomerId,
+ c.SupportRepId
+
+FROM Invoice AS i
+INNER JOIN
+Customer AS c
+ON
+i.CustomerId = c.CustomerId
+-- i.FirstName=c.FirstName
+INNER JOIN 
+ Employee AS e
+ON
+ c.SupportRepId = e.EmployeeId
+ORDER BY
+ i.total DESC
+-- LIMIT 10
+
+</sql><sql name="SQL 10">SELECT
+sum(total) as [total sum of sales],
+MAX(total) as [Maximum sales],
+min(total) as [Minimum sales],
+round(avg(total),3)as [Average sales],
+count(*) as [Total sales]
+
+FROM
+Invoice</sql><sql name="SQL 13">SELECT 
+BillingCity,
+BillingCountry,
+round(avg(total),2)
+
+FROM
+Invoice
+
+WHERE
+-- BillingCity LIKE 'L%'
+
+GROUP BY
+BillingCity, BillingCountry
+-- group by is done for non -aggregate fields 
+
+HAVING
+avg(total)&gt; 5 
+-- having clause always comes after group by and it's used for aggregate fields which do not work under where caluse
+
+ORDER BY
+BillingCity
+</sql><sql name="SQL 14">SELECT 
+BillingCity,
+BillingCountry,
+total
+
+FROM
+Invoice
+
+WHERE
+total&lt; (SELECT avg(total) FROM Invoice)
+</sql><sql name="SQL 15">SELECT 
+DISTINCT
+BillingCity
+
+FROM
+Invoice
+
+
+</sql><sql name="SQL 10">CREATE VIEW V_Avgtotal AS
+SELECT 
+BillingCity,
+BillingCountry,
+round(avg(total),2)
+
+FROM
+Invoice</sql><sql name="SQL 11">INSERT INTO
+ Artist(Name)
+VALUES('Lakshmi')
+</sql><current_tab id="9"/></tab_sql></sqlb_project>
